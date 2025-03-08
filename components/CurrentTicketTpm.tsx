@@ -1,6 +1,6 @@
 import { FirebaseApp } from "firebase/app";
-import { getDatabase, ref, set } from "firebase/database";
-import { CurrentVotes } from "~/routes/sessions.$id";
+import { get, getDatabase, ref, set } from "firebase/database";
+import { CurrentVotes, User } from "~/routes/sessions.$id";
 
 export default function CurrentTicketTpm({
   id,
@@ -66,6 +66,47 @@ export default function CurrentTicketTpm({
         <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer my-5"
+          onClick={() => {
+            const db = getDatabase(firebase); // Get a reference to the database service
+            const ticketRef = ref(db, `sessions/${id}/currentTicket`);
+            set(ticketRef, null).then(() => {
+              console.log("Ticket set");
+            });
+            const votesRef = ref(db, `sessions/${id}/currentVotes`);
+            set(votesRef, []);
+            console.log("Votes reset");
+            const devsRef = ref(db, `sessions/${id}/dev`);
+            get(devsRef)
+              .then((snapshot) => {
+                if (snapshot.exists()) {
+                  const devs = snapshot.val();
+                  // Do something with the devs data if needed
+                  devs.map((d: User) => (d.hasVoted = false));
+                  set(devsRef, devs);
+                } else {
+                  console.log("No data available");
+                }
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+
+            const qaRef = ref(db, `sessions/${id}/qa`);
+            get(qaRef)
+              .then((snapshot) => {
+                if (snapshot.exists()) {
+                  const devs = snapshot.val();
+                  // Do something with the devs data if needed
+                  devs.map((d: User) => (d.hasVoted = false));
+                  set(qaRef, devs);
+                } else {
+                  console.log("No data available");
+                }
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          }}
         >
           Finish Voting
         </button>
