@@ -3,6 +3,7 @@ import CurrentTicketOther from "components/CurrentTicketOther";
 import CurrentTicketTpm from "components/CurrentTicketTpm";
 import Loader from "components/Loader";
 import ShowVotes from "components/ShowVotes";
+import ShowVotesNonTpm from "components/ShowVotesNonTpm";
 import WelcomeToSession from "components/WelcomeToSession";
 import initFirebase from "constants/init_firebase";
 import { FirebaseApp } from "firebase/app";
@@ -29,6 +30,7 @@ export default function SessionPage() {
   const [qas, setQas] = useState<User[]>([]);
   const [currentTicket, setCurrentTicket] = useState<string | null>(null);
   const [currentVotes, setCurrentVotes] = useState<CurrentVotes>({});
+  const [revealedVotes, setRevealedVotes] = useState<CurrentVotes>({});
 
   const [firebase, setFirebase] = useState<FirebaseApp>();
 
@@ -154,9 +156,17 @@ export default function SessionPage() {
                 firebase={firebase}
               />
             )}
-            {currentTicket && (
-              <ShowVotes dev={devs} qa={qas} currentVotes={currentVotes} />
-            )}
+            {currentTicket ? (
+              tpm && tpm === me ? (
+                <ShowVotes dev={devs} qa={qas} currentVotes={currentVotes} />
+              ) : (
+                <ShowVotesNonTpm
+                  dev={devs}
+                  qa={qas}
+                  currentVotes={revealedVotes}
+                />
+              )
+            ) : null}
           </div>
           <div className="grid grid-cols-3 gap-4">Past tickets</div>
         </div>
