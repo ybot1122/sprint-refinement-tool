@@ -1,14 +1,16 @@
 import { FirebaseApp } from "firebase/app";
 import { get, getDatabase, push, ref, set } from "firebase/database";
 import { useEffect, useState } from "react";
-import { User } from "~/routes/sessions.$id";
+import { Role, User } from "~/routes/sessions.$id";
 
 export default function CurrentTicketOther({
   me,
   id,
+  role,
   ticketNum,
   firebase,
 }: {
+  role: Role;
   me: string;
   id: string;
   ticketNum: string | null;
@@ -16,22 +18,23 @@ export default function CurrentTicketOther({
 }) {
   const [selectedVote, setSelectedVote] = useState<number | null>(null);
 
-  if (!ticketNum) {
-    return <div>Waiting for next ticket...</div>;
-  }
+  useEffect(() => {
+    setSelectedVote(null);
+  }, [ticketNum]);
 
   useEffect(() => {
     const db = getDatabase(firebase); // Get a reference to the database service
-    const currentVotesRef = ref(db, `sessions/${id}/currentVotes`);
+    const currentVotesRef = ref(db, `sessions/${id}/currentVotes/${me}`);
 
-    push(currentVotesRef, { name: me, vote: selectedVote });
+    // update vote value in currentVotes
+    set(currentVotesRef, selectedVote);
 
-    const r = ref(db, `sessions/${id}/qa`);
+    // update voted status (hasVoted) in either dev or qa
+    const r = ref(db, `sessions/${id}/${role}`);
     get(r)
       .then((snapshot) => {
         if (snapshot.exists()) {
           const users = snapshot.val();
-          console.log(selectedVote);
           Object.keys(users).forEach((i) => {
             if (users[i].name === me) {
               users[i].hasVoted = selectedVote ? true : false;
@@ -46,6 +49,10 @@ export default function CurrentTicketOther({
         console.error(error);
       });
   }, [selectedVote]);
+
+  if (!ticketNum) {
+    return <div>Waiting for next ticket...</div>;
+  }
 
   return (
     <div>

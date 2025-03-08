@@ -9,7 +9,7 @@ import { get, getDatabase, onValue, push, ref } from "firebase/database";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export type Role = "dev" | "qa" | "tpm";
-export type CurrentVotes = { name: string; vote: number }[];
+export type CurrentVotes = Record<string, number>;
 export type User = { name: string; hasVoted: boolean };
 
 export default function SessionPage() {
@@ -27,9 +27,8 @@ export default function SessionPage() {
   const [devs, setDevs] = useState<User[]>([]);
   const [qas, setQas] = useState<User[]>([]);
   const [currentTicket, setCurrentTicket] = useState<string | null>(null);
-  const [currentVotes, setCurrentVotes] = useState<CurrentVotes>([]);
 
-  const firebase = useRef<FirebaseApp>();
+  const [firebase, setFirebase] = useState<FirebaseApp>();
 
   useEffect(() => {
     const check = async () => {
@@ -52,7 +51,7 @@ export default function SessionPage() {
     };
 
     const { app } = initFirebase(); // Initialize Firebase
-    firebase.current = app;
+    setFirebase(app);
     const database = getDatabase(app); // Get a reference to the database service
     const sessionRef = ref(database, `sessions/${id}`);
 
@@ -81,7 +80,7 @@ export default function SessionPage() {
   }, []);
 
   const addUser = useCallback((user: string, role: Role) => {
-    const db = getDatabase(firebase.current); // Get a reference to the database service
+    const db = getDatabase(firebase); // Get a reference to the database service
     const newUserRef = ref(db, `sessions/${id}/${role}`);
     const data = {
       name: user,
@@ -93,14 +92,17 @@ export default function SessionPage() {
     });
   }, []);
 
+  if (!firebase) {
+    return <Loader />;
+  }
+
   return (
     <div className="flex flex-col items-center justify-center bg-green-300 p-5 min-h-screen">
-      {role === "tpm" && tpm !== me && (
+      {role === "tpm" && tpm && tpm !== me && (
         <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
           Sorry, we only support 1 TPM per session. The TPM must be: {tpm}
         </div>
       )}
-      {!tpm && <Loader />}
       {!role && tpm && (
         <WelcomeToSession
           tpm={tpm}
@@ -148,17 +150,19 @@ export default function SessionPage() {
             {role === "tpm" && (
               <CurrentTicketTpm
                 currentTicket={currentTicket}
-                currentVotes={currentVotes}
-                firebase={firebase.current!}
+                firebase={firebase}
                 id={id!}
+                dev={devs}
+                qa={qas}
               />
             )}
             {role !== "tpm" && (
               <CurrentTicketOther
+                role={role}
                 me={me}
                 id={id!}
                 ticketNum={currentTicket}
-                firebase={firebase.current!}
+                firebase={firebase}
               />
             )}
           </div>
