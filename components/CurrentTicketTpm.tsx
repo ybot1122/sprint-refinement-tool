@@ -12,6 +12,12 @@ export default function CurrentTicketTpm({
   currentTicket: string | null;
   firebase: FirebaseApp;
 }) {
+  const [votesRevealed, setVotesRevealed] = useState(false);
+
+  useEffect(() => {
+    setVotesRevealed(false);
+  }, [currentTicket]);
+
   if (!currentTicket) {
     return (
       <div className="text-2xl mb-4 flex flex-col">
@@ -54,59 +60,86 @@ export default function CurrentTicketTpm({
         Current Ticket: <strong>{currentTicket}</strong>
       </h2>
       <div>
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer my-5"
-          onClick={() => {
-            const db = getDatabase(firebase); // Get a reference to the database service
-            const ticketRef = ref(db, `sessions/${id}/currentTicket`);
-            set(ticketRef, null).then(() => {
-              console.log("Ticket set");
-            });
-            const votesRef = ref(db, `sessions/${id}/currentVotes`);
-            set(votesRef, []);
-            console.log("Votes reset");
-
-            // reset vote status for dev
-            const devsRef = ref(db, `sessions/${id}/dev`);
-            get(devsRef)
-              .then((snapshot) => {
+        {!votesRevealed && (
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer my-5"
+            onClick={() => {
+              const db = getDatabase(firebase); // Get a reference to the database service
+              const currentVotesRef = ref(db, `sessions/${id}/currentVotes`);
+              get(currentVotesRef).then((snapshot) => {
                 if (snapshot.exists()) {
-                  const devs = snapshot.val();
-                  Object.keys(devs).forEach((i) => {
-                    devs[i].hasVoted = false;
-                  });
-                  set(devsRef, devs);
-                } else {
-                  console.log("No data available");
+                  const revealedRef = ref(db, `sessions/${id}/revealedVotes`);
+                  const currentVotes = snapshot.val();
+                  set(revealedRef, currentVotes);
                 }
-              })
-              .catch((error) => {
-                console.error(error);
+                setVotesRevealed(true);
               });
+            }}
+          >
+            Reveal Votes
+          </button>
+        )}
+        {votesRevealed && (
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer my-5"
+            onClick={() => {
+              const db = getDatabase(firebase); // Get a reference to the database service
+              const ticketRef = ref(db, `sessions/${id}/currentTicket`);
+              set(ticketRef, null).then(() => {
+                console.log("Ticket set");
+              });
+              const votesRef = ref(db, `sessions/${id}/currentVotes`);
+              set(votesRef, []);
+              console.log("Votes reset");
 
-            // reset vote status for qa
-            const qaRef = ref(db, `sessions/${id}/qa`);
-            get(qaRef)
-              .then((snapshot) => {
-                if (snapshot.exists()) {
-                  const devs = snapshot.val();
-                  console.log(devs);
-                  Object.keys(devs).forEach((i) => {
-                    devs[i].hasVoted = false;
-                  });
-                  set(qaRef, devs);
-                } else {
-                  console.log("No data available");
-                }
-              })
-              .catch((error) => {
-                console.error(error);
-              });
-          }}
-        >
-          Finish Voting
-        </button>
+              // reset revealed votes
+              const revealedRef = ref(db, `sessions/${id}/revealedVotes`);
+              set(revealedRef, []);
+              console.log("Revealed votes reset");
+
+              // reset vote status for dev
+              const devsRef = ref(db, `sessions/${id}/dev`);
+              get(devsRef)
+                .then((snapshot) => {
+                  if (snapshot.exists()) {
+                    const devs = snapshot.val();
+                    Object.keys(devs).forEach((i) => {
+                      devs[i].hasVoted = false;
+                    });
+                    set(devsRef, devs);
+                  } else {
+                    console.log("No data available");
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+
+              // reset vote status for qa
+              const qaRef = ref(db, `sessions/${id}/qa`);
+              get(qaRef)
+                .then((snapshot) => {
+                  if (snapshot.exists()) {
+                    const devs = snapshot.val();
+                    console.log(devs);
+                    Object.keys(devs).forEach((i) => {
+                      devs[i].hasVoted = false;
+                    });
+                    set(qaRef, devs);
+                  } else {
+                    console.log("No data available");
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
+            }}
+          >
+            Finish Ticket
+          </button>
+        )}
       </div>
     </div>
   );

@@ -97,17 +97,32 @@ export default function SessionPage() {
   }, []);
 
   useEffect(() => {
-    if (firebase && tpm && tpm === me) {
-      const db = getDatabase(firebase); // Get a reference to the database service
-      const currentVotesRef = ref(db, `sessions/${id}/currentVotes`);
+    if (firebase) {
+      if (tpm && tpm === me) {
+        const db = getDatabase(firebase); // Get a reference to the database service
+        const currentVotesRef = ref(db, `sessions/${id}/currentVotes`);
 
-      onValue(currentVotesRef, (snapshot) => {
-        if (snapshot.exists()) {
-          setCurrentVotes(snapshot.val());
-        } else {
-          setCurrentVotes({});
-        }
-      });
+        onValue(currentVotesRef, (snapshot) => {
+          if (snapshot.exists()) {
+            setCurrentVotes(snapshot.val());
+          } else {
+            setCurrentVotes({});
+          }
+        });
+      }
+
+      if (tpm && tpm !== me) {
+        const db = getDatabase(firebase); // Get a reference to the database service
+        const revealedVotesRef = ref(db, `sessions/${id}/revealedVotes`);
+
+        onValue(revealedVotesRef, (snapshot) => {
+          if (snapshot.exists()) {
+            setRevealedVotes(snapshot.val());
+          } else {
+            setRevealedVotes({});
+          }
+        });
+      }
     }
   }, [tpm, me, firebase]);
 
