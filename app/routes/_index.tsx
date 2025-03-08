@@ -39,7 +39,10 @@ export default function Index() {
       <div className="flex flex-col gap-4 w-[320px]">
         <button
           className="px-5 py-2 text-lg rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
-          onClick={() => setShowSessionInput(!showSessionInput)}
+          onClick={() => {
+            setShowStart(false);
+            setShowSessionInput(!showSessionInput);
+          }}
         >
           Join Existing Session
         </button>
@@ -54,6 +57,11 @@ export default function Index() {
             <button
               className="ml-2 px-5 py-2 text-lg rounded bg-green-500 text-white hover:bg-green-600 transition-colors"
               onClick={async () => {
+                if (!sessionId || sessionId.length < 5) {
+                  alert("Please enter a valid session ID");
+                  return;
+                }
+
                 setIsLoading(true);
                 const app = firebase.current;
                 if (!app) {
@@ -68,6 +76,7 @@ export default function Index() {
                 try {
                   const snapshot = await get(sessionRef);
                   if (snapshot.exists()) {
+                    window.location.href = `/sessions/${sessionId}`;
                   } else {
                     alert(`Session id ${sessionId} not found`);
                   }
@@ -85,7 +94,10 @@ export default function Index() {
         )}
         <button
           className="px-5 py-2 text-lg rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
-          onClick={() => setShowStart(!showStart)}
+          onClick={() => {
+            setShowStart(!showStart);
+            setShowSessionInput(false);
+          }}
         >
           Start New Session
         </button>
@@ -100,6 +112,13 @@ export default function Index() {
             <button
               className="ml-2 px-5 py-2 text-lg rounded bg-green-500 text-white hover:bg-green-600 transition-colors"
               onClick={async () => {
+                if (!adminName || adminName.length < 2) {
+                  alert(
+                    "Please enter a name for the admin (3 characters or more)"
+                  );
+                  return;
+                }
+
                 const app = firebase.current;
                 if (!app) {
                   alert("Sorry, could not connect to firebase");
@@ -118,6 +137,8 @@ export default function Index() {
                   created_at: new Date().getMilliseconds(),
                   admin: adminName,
                 });
+
+                window.location.href = `/sessions/${new_session_id}`;
               }}
             >
               Create
