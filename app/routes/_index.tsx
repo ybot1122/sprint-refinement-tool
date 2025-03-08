@@ -1,5 +1,9 @@
 import type { MetaFunction } from "@vercel/remix";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
+import initFirebase from "constants/init_firebase";
+import { FirebaseApp } from "firebase/app";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,6 +15,13 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   const [showSessionInput, setShowSessionInput] = React.useState(false);
   const [sessionId, setSessionId] = React.useState("");
+  const firebase = useRef<FirebaseApp>();
+
+  useEffect(() => {
+    const { app } = initFirebase(); // Initialize Firebase
+    firebase.current = app;
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-green-300 p-5">
       <h1 className="text-4xl mb-5">Welcome to Sprint Refinement</h1>
@@ -31,7 +42,20 @@ export default function Index() {
             />
             <button
               className="ml-2 px-5 py-2 text-lg rounded bg-green-500 text-white hover:bg-green-600 transition-colors"
-              onClick={() => alert(`Joining session ${sessionId}`)}
+              onClick={async () => {
+                const app = firebase.current;
+                if (!app) {
+                  alert("Sorry, could not connect to firebase");
+                  return;
+                }
+
+                const database = getDatabase(app); // Get a reference to the database service
+                const usersRef = ref(database, "sessions");
+                onValue(usersRef, (snapshot) => {
+                  const data = snapshot.val();
+                  console.log(data); // Access the data here!
+                });
+              }}
             >
               Join
             </button>
@@ -39,7 +63,24 @@ export default function Index() {
         )}
         <button
           className="px-5 py-2 text-lg rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
-          onClick={() => alert("Start a new session")}
+          onClick={() => {
+            const app = firebase.current;
+            if (!app) {
+              alert("Sorry, could not connect to firebase");
+              return;
+            }
+
+            const database = getDatabase(app); // Get a reference to the database service
+
+            const new_session_id = Math.random().toString(36).substring(2, 15);
+
+            // Set data at a specific location
+            set(ref(database, `sessions/${new_session_id}`), {
+              session_id: new_session_id,
+              created_at: new Date().getMilliseconds(),
+              admin: "admin",
+            });
+          }}
         >
           Start New Session
         </button>
