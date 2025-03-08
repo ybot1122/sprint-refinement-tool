@@ -120,7 +120,9 @@ export default function SessionPage() {
               {devs.map((o) => (
                 <span
                   key={o.name}
-                  className={(o.hasVoted ? "text-green-600" : "") + " px-2"}
+                  className={
+                    (o.hasVoted ? "text-green-600 font-bold " : "") + " px-2"
+                  }
                 >
                   {o.name}
                 </span>
@@ -132,7 +134,9 @@ export default function SessionPage() {
                 {qas.map((o) => (
                   <span
                     key={o.name}
-                    className={(o.hasVoted ? "text-green-600" : "") + " px-2"}
+                    className={
+                      (o.hasVoted ? "text-green-600 font-bold " : "") + " px-2"
+                    }
                   >
                     {o.name}
                   </span>
@@ -149,7 +153,14 @@ export default function SessionPage() {
                 id={id!}
               />
             )}
-            {role !== "tpm" && <CurrentTicketOther ticketNum={currentTicket} />}
+            {role !== "tpm" && (
+              <CurrentTicketOther
+                me={me}
+                id={id!}
+                ticketNum={currentTicket}
+                firebase={firebase.current!}
+              />
+            )}
           </div>
           <div className="grid grid-cols-3 gap-4">Past tickets</div>
         </div>
