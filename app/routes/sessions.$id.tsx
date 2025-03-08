@@ -9,10 +9,8 @@ import { get, getDatabase, onValue, push, ref } from "firebase/database";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export type Role = "dev" | "qa" | "tpm";
-export type CurrentTicket = {
-  id: string;
-  votes: [{ name: string; vote: number }];
-};
+export type CurrentVotes = { name: string; vote: number }[];
+export type User = { name: string; hasVoted: boolean };
 
 export default function SessionPage() {
   const [searchParams] = useSearchParams();
@@ -26,11 +24,10 @@ export default function SessionPage() {
 
   // from db
   const [tpm, setTpm] = useState("");
-  const [devs, setDevs] = useState<string[]>([]);
-  const [qas, setQas] = useState<string[]>([]);
-  const [currentTicket, setCurrentTicket] = useState<CurrentTicket | null>(
-    null
-  );
+  const [devs, setDevs] = useState<User[]>([]);
+  const [qas, setQas] = useState<User[]>([]);
+  const [currentTicket, setCurrentTicket] = useState<string | null>(null);
+  const [currentVotes, setCurrentVotes] = useState<CurrentVotes>([]);
 
   const firebase = useRef<FirebaseApp>();
 
@@ -71,7 +68,7 @@ export default function SessionPage() {
       onValue(ref(database, `sessions/${id}/currentTicket`), (snapshot) => {
         const curr = snapshot.val();
 
-        if (!curr.id) {
+        if (!curr?.id) {
           setCurrentTicket(null);
         } else {
           if (!curr.votes) {
@@ -93,7 +90,11 @@ export default function SessionPage() {
   const addUser = useCallback((user: string, role: Role) => {
     const db = getDatabase(firebase.current); // Get a reference to the database service
     const newUserRef = ref(db, `sessions/${id}/${role}`);
-    push(newUserRef, user).then(() => {
+    const data = {
+      name: user,
+      hasVoted: false,
+    };
+    push(newUserRef, data).then(() => {
       setMe(user);
       setRole(role);
     });
@@ -121,13 +122,14 @@ export default function SessionPage() {
             <p>
               Welcome, {me}. You are a {role.toLocaleUpperCase()}.
             </p>
-            <p>Devs: {devs.join(", ")}</p>
-            <p>QA: {qas.join(", ")}</p>
+            <p>Devs: {devs.map((o) => o.name).join(", ")}</p>
+            <p>QA: {qas.map((o) => o.name).join(", ")}</p>
           </div>
           <div className="flex flex-col justify-center items-center my-20">
             {role === "tpm" && (
               <CurrentTicketTpm
                 currentTicket={currentTicket}
+                currentVotes={currentVotes}
                 firebase={firebase.current!}
                 id={id!}
               />

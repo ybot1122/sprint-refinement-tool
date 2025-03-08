@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Role } from "~/routes/sessions.$id";
+import { Role, User } from "~/routes/sessions.$id";
 import Loader from "./Loader";
 
 interface WelcomeToSessionProps {
   tpm: string;
-  online: string[];
+  online: User[];
   addUser: (user: string, role: Role) => void;
 }
 
@@ -25,7 +25,7 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
       return;
     }
 
-    if (online.includes(name)) {
+    if (online.some((user) => user.name === name)) {
       alert("Name already taken");
       setIsLoading(false);
       return;
@@ -50,7 +50,9 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
         </h1>
         <h1 className="text-xl mb-4 text-center">Hosted By: {tpm}</h1>
         <h1 className="text-sm text-center mb-4">
-          {!online.length ? "no one else here :(" : online.join(", ")}
+          {!online.length
+            ? "no one else here :("
+            : online.map((o) => o.name).join(", ")}
         </h1>
         <label htmlFor="role-select" className="block text-gray-700 mb-2">
           Select your role:

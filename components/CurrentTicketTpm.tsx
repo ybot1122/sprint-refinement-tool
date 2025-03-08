@@ -1,14 +1,16 @@
 import { FirebaseApp } from "firebase/app";
 import { getDatabase, ref, set } from "firebase/database";
-import { CurrentTicket } from "~/routes/sessions.$id";
+import { CurrentVotes } from "~/routes/sessions.$id";
 
 export default function CurrentTicketTpm({
   id,
   currentTicket,
+  currentVotes,
   firebase,
 }: {
   id: string;
-  currentTicket: CurrentTicket | null;
+  currentTicket: string | null;
+  currentVotes: CurrentVotes;
   firebase: FirebaseApp;
 }) {
   if (!currentTicket) {
@@ -18,15 +20,26 @@ export default function CurrentTicketTpm({
         <input
           type="text"
           className="border border-gray-300 rounded px-2 py-1 text-center my-5"
+          id="ticket-input"
+          placeholder="Example: WEB-1234"
         />
         <button
           type="button"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer my-5"
           onClick={() => {
             const db = getDatabase(firebase); // Get a reference to the database service
-            const newUserRef = ref(db, `sessions/${id}/currentTicket`);
-            set(newUserRef, {
-              id: "WEB-1245",
+            const ticketRef = ref(db, `sessions/${id}/currentTicket`);
+            const ticketNumber = (
+              document.getElementById("ticket-input") as HTMLInputElement
+            )?.value;
+
+            if (!ticketNumber) {
+              alert("Please enter a ticket number");
+              return;
+            }
+
+            set(ticketRef, {
+              id: ticketNumber,
               votes: [],
             }).then(() => {
               console.log("Ticket set");
@@ -42,15 +55,23 @@ export default function CurrentTicketTpm({
   return (
     <div>
       <h2 className="text-2xl mb-4">
-        Current Ticket: <strong>{currentTicket.id}</strong>
+        Current Ticket: <strong>{currentTicket}</strong>
       </h2>
       <div>
         <div className="flex space-x-2">Current Votes</div>
-        {currentTicket.votes.map((vote) => (
+        {currentVotes.map((vote) => (
           <p>
             {vote.name}: {vote.vote}
           </p>
         ))}
+      </div>
+      <div>
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer my-5"
+        >
+          Finish Voting
+        </button>
       </div>
     </div>
   );
