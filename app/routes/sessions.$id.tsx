@@ -2,6 +2,7 @@ import { useParams, useSearchParams } from "@remix-run/react";
 import CurrentTicketOther from "components/CurrentTicketOther";
 import CurrentTicketTpm from "components/CurrentTicketTpm";
 import Loader from "components/Loader";
+import ShowVotes from "components/ShowVotes";
 import WelcomeToSession from "components/WelcomeToSession";
 import initFirebase from "constants/init_firebase";
 import { FirebaseApp } from "firebase/app";
@@ -27,6 +28,7 @@ export default function SessionPage() {
   const [devs, setDevs] = useState<User[]>([]);
   const [qas, setQas] = useState<User[]>([]);
   const [currentTicket, setCurrentTicket] = useState<string | null>(null);
+  const [currentVotes, setCurrentVotes] = useState<CurrentVotes>({});
 
   const [firebase, setFirebase] = useState<FirebaseApp>();
 
@@ -92,6 +94,21 @@ export default function SessionPage() {
     });
   }, []);
 
+  useEffect(() => {
+    if (firebase && tpm && tpm === me) {
+      const db = getDatabase(firebase); // Get a reference to the database service
+      const currentVotesRef = ref(db, `sessions/${id}/currentVotes`);
+
+      onValue(currentVotesRef, (snapshot) => {
+        if (snapshot.exists()) {
+          setCurrentVotes(snapshot.val());
+        } else {
+          setCurrentVotes({});
+        }
+      });
+    }
+  }, [tpm, me, firebase]);
+
   if (!firebase) {
     return <Loader />;
   }
@@ -112,39 +129,13 @@ export default function SessionPage() {
       )}
       {role && me && (
         <div className="w-full max-w-4xl bg-white p-8 rounded shadow-md">
-          <h1 className="text-2xl font-bold mb-4">Sprint Refinement</h1>
+          <h1 className="text-2xl font-bold mb-4">
+            Sprint Refinement - {tpm} is the TPM
+          </h1>
           <div className="grid grid-cols-3 gap-4 mb-4">
             <p>
               Welcome, {me}. You are a {role.toLocaleUpperCase()}.
             </p>
-            <div>
-              <p>Devs:</p>{" "}
-              {devs.map((o) => (
-                <span
-                  key={o.name}
-                  className={
-                    (o.hasVoted ? "text-green-600 font-bold " : "") + " px-2"
-                  }
-                >
-                  {o.name}
-                </span>
-              ))}
-            </div>
-            <div>
-              <p>QA:</p>
-              <ul>
-                {qas.map((o) => (
-                  <span
-                    key={o.name}
-                    className={
-                      (o.hasVoted ? "text-green-600 font-bold " : "") + " px-2"
-                    }
-                  >
-                    {o.name}
-                  </span>
-                ))}
-              </ul>
-            </div>
           </div>
           <div className="flex flex-col justify-center items-center my-20">
             {role === "tpm" && (
@@ -152,8 +143,6 @@ export default function SessionPage() {
                 currentTicket={currentTicket}
                 firebase={firebase}
                 id={id!}
-                dev={devs}
-                qa={qas}
               />
             )}
             {role !== "tpm" && (
@@ -164,6 +153,9 @@ export default function SessionPage() {
                 ticketNum={currentTicket}
                 firebase={firebase}
               />
+            )}
+            {currentTicket && (
+              <ShowVotes dev={devs} qa={qas} currentVotes={currentVotes} />
             )}
           </div>
           <div className="grid grid-cols-3 gap-4">Past tickets</div>

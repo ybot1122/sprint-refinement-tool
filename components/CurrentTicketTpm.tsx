@@ -7,30 +7,11 @@ export default function CurrentTicketTpm({
   id,
   currentTicket,
   firebase,
-  qa,
-  dev,
 }: {
   id: string;
   currentTicket: string | null;
   firebase: FirebaseApp;
-  qa: User[];
-  dev: User[];
 }) {
-  const [currentVotes, setCurrentVotes] = useState<CurrentVotes>({});
-
-  useEffect(() => {
-    const db = getDatabase(firebase); // Get a reference to the database service
-    const currentVotesRef = ref(db, `sessions/${id}/currentVotes`);
-
-    onValue(currentVotesRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setCurrentVotes(snapshot.val());
-      } else {
-        setCurrentVotes({});
-      }
-    });
-  }, []);
-
   if (!currentTicket) {
     return (
       <div className="text-2xl mb-4 flex flex-col">
@@ -72,34 +53,6 @@ export default function CurrentTicketTpm({
       <h2 className="text-2xl mb-4">
         Current Ticket: <strong>{currentTicket}</strong>
       </h2>
-      <div className="flex w-full justify-around mt-4">
-        <div className="w-1/2 text-center">
-          <h3 className="text-xl mb-2">DEV Votes</h3>
-          <div className="flex flex-col items-center space-y-2">
-            {dev.map((user) => (
-              <p
-                key={user.name}
-                className="border border-gray-300 rounded px-2 py-1 w-3/4"
-              >
-                {user.name}: {currentVotes[user.name] || "No vote"}
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className="w-1/2 text-center">
-          <h3 className="text-xl mb-2">QA Votes</h3>
-          <div className="flex flex-col items-center space-y-2">
-            {qa.map((user) => (
-              <p
-                key={user.name}
-                className="border border-gray-300 rounded px-2 py-1 w-3/4"
-              >
-                {user.name}: {currentVotes[user.name] || "No vote"}
-              </p>
-            ))}
-          </div>
-        </div>
-      </div>
       <div>
         <button
           type="submit"
