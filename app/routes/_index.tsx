@@ -135,13 +135,13 @@ export default function Index() {
                 // Set data at a specific location
                 set(ref(database, `sessions/${new_session_id}`), {
                   session_id: new_session_id,
-                  created_at: new Date().getMilliseconds(),
+                  created_at: Date.now(),
                   admin: adminName,
                   dev: {},
                   qa: {},
+                }).then(() => {
+                  window.location.href = `/sessions/${new_session_id}?tpm=${adminName}`;
                 });
-
-                window.location.href = `/sessions/${new_session_id}`;
               }}
             >
               Create

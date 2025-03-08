@@ -5,25 +5,33 @@ import Loader from "./Loader";
 interface WelcomeToSessionProps {
   tpm: string;
   online: string[];
+  addUser: (user: string, role: Role) => void;
 }
 
-const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({ tpm, online }) => {
+const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
+  tpm,
+  online,
+  addUser,
+}) => {
   const [role, setRole] = useState<Role | null>(null);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const onJoin = () => {
+    setIsLoading(true);
     if (!role || !name) {
       alert("Please select a role and enter your name");
+      setIsLoading(false);
       return;
     }
 
     if (online.includes(name)) {
       alert("Name already taken");
+      setIsLoading(false);
       return;
     }
 
-    alert("hi");
+    addUser(name, role);
   };
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
