@@ -115,8 +115,30 @@ export default function SessionPage() {
             <p>
               Welcome, {me}. You are a {role.toLocaleUpperCase()}.
             </p>
-            <p>Devs: {devs.map((o) => o.name).join(", ")}</p>
-            <p>QA: {qas.map((o) => o.name).join(", ")}</p>
+            <div>
+              <p>Devs:</p>{" "}
+              {devs.map((o) => (
+                <span
+                  key={o.name}
+                  className={(o.hasVoted ? "text-green-600" : "") + " px-2"}
+                >
+                  {o.name}
+                </span>
+              ))}
+            </div>
+            <div>
+              <p>QA:</p>
+              <ul>
+                {qas.map((o) => (
+                  <span
+                    key={o.name}
+                    className={(o.hasVoted ? "text-green-600" : "") + " px-2"}
+                  >
+                    {o.name}
+                  </span>
+                ))}
+              </ul>
+            </div>
           </div>
           <div className="flex flex-col justify-center items-center my-20">
             {role === "tpm" && (
