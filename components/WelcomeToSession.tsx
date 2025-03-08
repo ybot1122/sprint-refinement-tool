@@ -16,7 +16,11 @@ const WelcomeToSession: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4">Welcome to the Session</h1>
+        <h1 className="text-2xl font-bold mb-4">
+          Welcome to Sprint Refinement
+        </h1>
+        <h1 className="text-xl mb-4">Hosted By: </h1>
+        <h1 className="text-xl mb-4">n People Online</h1>
         <label htmlFor="role-select" className="block text-gray-700 mb-2">
           Choose your role:
         </label>
@@ -31,7 +35,6 @@ const WelcomeToSession: React.FC = () => {
           </option>
           <option value="dev">Developer</option>
           <option value="qa">QA</option>
-          <option value="tpm">TPM</option>
         </select>
         <div className=" w-full max-w-md mt-4">
           <label htmlFor="name-input" className="block text-gray-700 mb-2">
