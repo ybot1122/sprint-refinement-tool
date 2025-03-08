@@ -1,13 +1,30 @@
 import React, { useState } from "react";
 import { Role } from "~/routes/sessions.$id";
+import Loader from "./Loader";
 
 interface WelcomeToSessionProps {
   tpm: string;
+  online: string[];
 }
 
-const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({ tpm }) => {
+const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({ tpm, online }) => {
   const [role, setRole] = useState<Role | null>(null);
   const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onJoin = () => {
+    if (!role || !name) {
+      alert("Please select a role and enter your name");
+      return;
+    }
+
+    if (online.includes(name)) {
+      alert("Name already taken");
+      return;
+    }
+
+    alert("hi");
+  };
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const val = event.target.value;
@@ -23,10 +40,12 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({ tpm }) => {
         <h1 className="text-2xl font-bold mb-4">
           Welcome to Sprint Refinement
         </h1>
-        <h1 className="text-xl mb-4">Hosted By: {tpm}</h1>
-        <h1 className="text-xl mb-4">n People Online</h1>
+        <h1 className="text-xl mb-4 text-center">Hosted By: {tpm}</h1>
+        <h1 className="text-sm text-center mb-4">
+          {!online.length ? "no one else here :(" : online.join(", ")}
+        </h1>
         <label htmlFor="role-select" className="block text-gray-700 mb-2">
-          Choose your role:
+          Select your role:
         </label>
         <select
           id="role-select"
@@ -39,6 +58,7 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({ tpm }) => {
           </option>
           <option value="dev">Developer</option>
           <option value="qa">QA</option>
+          <option value="tpm">TPM</option>
         </select>
         <div className=" w-full max-w-md mt-4">
           <label htmlFor="name-input" className="block text-gray-700 mb-2">
@@ -53,13 +73,17 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({ tpm }) => {
           />
         </div>
 
-        <button
-          onClick={() => alert(`Joining as ${role} with name ${name}`)}
-          className="bg-blue-500 text-white p-2 rounded w-full disabled:bg-gray-300 disabled:cursor-not-allowed"
-          disabled={!role || !name}
-        >
-          Join Session
-        </button>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <button
+            onClick={onJoin}
+            className="bg-blue-500 text-white p-2 rounded w-full disabled:bg-gray-300 disabled:cursor-not-allowed cursor-pointer"
+            disabled={!role || !name}
+          >
+            Join Session
+          </button>
+        )}
       </div>
     </div>
   );

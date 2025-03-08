@@ -137,6 +137,8 @@ export default function Index() {
                   session_id: new_session_id,
                   created_at: new Date().getMilliseconds(),
                   admin: adminName,
+                  dev: {},
+                  qa: {},
                 });
 
                 window.location.href = `/sessions/${new_session_id}`;
