@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Role } from "~/routes/sessions.$id";
 
-const WelcomeToSession: React.FC = () => {
+interface WelcomeToSessionProps {
+  tpm: string;
+}
+
+const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({ tpm }) => {
   const [role, setRole] = useState<Role | null>(null);
   const [name, setName] = useState("");
 
@@ -19,7 +23,7 @@ const WelcomeToSession: React.FC = () => {
         <h1 className="text-2xl font-bold mb-4">
           Welcome to Sprint Refinement
         </h1>
-        <h1 className="text-xl mb-4">Hosted By: </h1>
+        <h1 className="text-xl mb-4">Hosted By: {tpm}</h1>
         <h1 className="text-xl mb-4">n People Online</h1>
         <label htmlFor="role-select" className="block text-gray-700 mb-2">
           Choose your role:

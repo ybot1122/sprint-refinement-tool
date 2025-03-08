@@ -4,6 +4,7 @@ import { collection, getDocs, getFirestore } from "firebase/firestore";
 import initFirebase from "constants/init_firebase";
 import { FirebaseApp } from "firebase/app";
 import { getDatabase, ref, onValue, set, push, get } from "firebase/database";
+import Loader from "components/Loader";
 
 export const meta: MetaFunction = () => {
   return [
@@ -28,7 +29,7 @@ export default function Index() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-green-300 p-5">
-        <div>Loading...</div>
+        <Loader />
       </div>
     );
   }

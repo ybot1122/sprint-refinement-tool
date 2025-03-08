@@ -7,6 +7,7 @@ import {
 } from "@remix-run/react";
 import { Analytics } from "@vercel/analytics/react";
 import "./tailwind.css";
+import AlphaTestingDisclaimer from "components/AlphaTestingDisclaimer";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,6 +19,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <AlphaTestingDisclaimer />
         {children}
         <ScrollRestoration />
         <Scripts />

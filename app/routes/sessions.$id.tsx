@@ -1,4 +1,5 @@
 import { useParams } from "@remix-run/react";
+import Loader from "components/Loader";
 import WelcomeToSession from "components/WelcomeToSession";
 import initFirebase from "constants/init_firebase";
 import { FirebaseApp } from "firebase/app";
@@ -9,6 +10,7 @@ export type Role = "dev" | "qa" | "tpm";
 
 export default function SessionPage() {
   const { id } = useParams();
+  const [tpm, setTpm] = useState("");
   const [role, setRole] = useState<Role | null>(null);
 
   const firebase = useRef<FirebaseApp>();
@@ -41,7 +43,8 @@ export default function SessionPage() {
 
   return (
     <div className="flex flex-col items-center justify-center bg-green-300 p-5 min-h-screen">
-      {!role && <WelcomeToSession />}
+      {!tpm && <Loader />}
+      {!role && tpm && <WelcomeToSession tpm={tpm} />}
     </div>
   );
 }
