@@ -67,17 +67,10 @@ export default function SessionPage() {
 
       onValue(ref(database, `sessions/${id}/currentTicket`), (snapshot) => {
         const curr = snapshot.val();
-
-        if (!curr?.id) {
-          setCurrentTicket(null);
-        } else {
-          if (!curr.votes) {
-            curr.votes = [];
-          }
-          setCurrentTicket(curr);
-        }
+        setCurrentTicket(curr || null);
       });
 
+      // for debugging
       onValue(ref(database, `sessions/${id}`), (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -134,7 +127,7 @@ export default function SessionPage() {
                 id={id!}
               />
             )}
-            {role !== "tpm" && <CurrentTicketOther />}
+            {role !== "tpm" && <CurrentTicketOther ticketNum={currentTicket} />}
           </div>
           <div className="grid grid-cols-3 gap-4">Past tickets</div>
         </div>

@@ -38,10 +38,7 @@ export default function CurrentTicketTpm({
               return;
             }
 
-            set(ticketRef, {
-              id: ticketNumber,
-              votes: [],
-            }).then(() => {
+            set(ticketRef, ticketNumber).then(() => {
               console.log("Ticket set");
             });
           }}
