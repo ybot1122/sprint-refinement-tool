@@ -25,6 +25,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Scripts />
         <Analytics />
       </body>
+      <footer className="text-center text-gray-500 text-sm p-4 flex justify-center items-center gap-2">
+        <a
+          href="https://github.com/ybot1122/sprint-refinement-tool"
+          className="hover:underline"
+        >
+          Source Code on GitHub
+        </a>{" "}
+        | <p>Alpha Testing - Do Not Type Sensitive Information</p>
+      </footer>
     </html>
   );
 }
