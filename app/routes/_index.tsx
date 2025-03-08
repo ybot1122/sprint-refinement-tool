@@ -2,40 +2,29 @@ import type { MetaFunction } from "@vercel/remix";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Sprint Refinement Tool" },
+    { name: "description", content: "Welcome to Sprint Refinement" },
   ];
 };
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 p-5">
+      <h1 className="text-4xl mb-5">Welcome to Remix!</h1>
+      <div className="flex gap-4">
+        <button
+          className="px-5 py-2 text-lg rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+          onClick={() => alert("Join an existing session")}
+        >
+          Join Existing Session
+        </button>
+        <button
+          className="px-5 py-2 text-lg rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+          onClick={() => alert("Start a new session")}
+        >
+          Start New Session
+        </button>
+      </div>
     </div>
   );
 }
