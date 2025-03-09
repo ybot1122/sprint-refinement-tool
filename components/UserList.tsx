@@ -35,7 +35,9 @@ const UserList: React.FC<UserListProps> = ({
         >
           <p className="text-xl my-2">{user.name}</p>
           <p className="text-2xl font-bold mb-2">
-            {currentVotes ? currentVotes[user.name] || "" : ""}
+            {currentVotes?.[user.name] === null
+              ? ""
+              : currentVotes?.[user.name]}
           </p>
         </div>
       ))}

@@ -20,6 +20,7 @@ export type PastTicket = {
   id: string;
   votes: CurrentVotes;
   finalVote: number;
+  finalQaVote: number;
   duration: number;
 };
 
@@ -59,8 +60,11 @@ const PastTickets: React.FC<PastTicketsProps> = ({ firebase, id }) => {
             .map((ticket: PastTicket) => (
               <div key={ticket.uuid} className="border p-4 rounded shadow">
                 <h2 className="text-lg font-bold">
-                  {ticket.id.toLocaleUpperCase()}: {ticket.finalVote}
+                  {ticket.id.toLocaleUpperCase()}
                 </h2>
+                <p>
+                  Dev: {ticket.finalVote}, QA: {ticket.finalQaVote}
+                </p>
                 <p>
                   Time spent: {Math.floor(ticket.duration / 60000)}m
                   {((ticket.duration % 60000) / 1000)

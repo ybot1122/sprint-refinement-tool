@@ -40,7 +40,7 @@ export default function CurrentTicketOther({
           const users = snapshot.val();
           Object.keys(users).forEach((i) => {
             if (users[i].name === me) {
-              users[i].hasVoted = selectedVote ? true : false;
+              users[i].hasVoted = selectedVote !== null ? true : false;
             }
           });
           set(r, users);
