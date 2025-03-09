@@ -12,27 +12,33 @@ export default function ShowVotes({
   return (
     <div className="flex w-full justify-around mt-20">
       <div className="w-1/2 text-center">
-        <h3 className="text-xl mb-2">DEV Votes</h3>
+        <h3 className="text-xl my-2">DEV Votes</h3>
         <div className="flex flex-col items-center space-y-2">
           {dev.map((user) => (
             <p
               key={user.name}
-              className="border border-gray-300 rounded px-2 py-1 w-3/4"
+              className="border-2 border-gray-300 rounded px-2 py-1 w-3/4"
             >
-              {user.name}: {currentVotes[user.name] || "No vote"}
+              <p className="text-xl my-2">{user.name}</p>
+              <p className="text-2xl font-bold">
+                {currentVotes ? currentVotes[user.name] || "" : ""}
+              </p>
             </p>
           ))}
         </div>
       </div>
       <div className="w-1/2 text-center">
-        <h3 className="text-xl mb-2">QA Votes</h3>
+        <h3 className="text-xl my-2">QA Votes</h3>
         <div className="flex flex-col items-center space-y-2">
           {qa.map((user) => (
             <p
               key={user.name}
-              className="border border-gray-300 rounded px-2 py-1 w-3/4"
+              className="border-2 border-gray-300 rounded px-2 py-1 w-3/4"
             >
-              {user.name}: {currentVotes[user.name] || "No vote"}
+              <p className="text-xl my-2">{user.name}</p>
+              <p className="text-2xl font-bold">
+                {currentVotes ? currentVotes[user.name] || "" : ""}
+              </p>
             </p>
           ))}
         </div>
