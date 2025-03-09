@@ -96,7 +96,7 @@ export default function CurrentTicketTpm({
 
               // reset revealed votes
               const revealedRef = ref(db, `sessions/${id}/revealedVotes`);
-              set(revealedRef, []);
+              set(revealedRef, null);
               console.log("Revealed votes reset");
 
               // reset vote status for dev

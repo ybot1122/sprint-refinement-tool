@@ -30,7 +30,7 @@ export default function SessionPage() {
   const [qas, setQas] = useState<User[]>([]);
   const [currentTicket, setCurrentTicket] = useState<string | null>(null);
   const [currentVotes, setCurrentVotes] = useState<CurrentVotes>({});
-  const [revealedVotes, setRevealedVotes] = useState<CurrentVotes>({});
+  const [revealedVotes, setRevealedVotes] = useState<CurrentVotes | null>(null);
 
   const [firebase, setFirebase] = useState<FirebaseApp>();
 
@@ -119,12 +119,14 @@ export default function SessionPage() {
           if (snapshot.exists()) {
             setRevealedVotes(snapshot.val());
           } else {
-            setRevealedVotes({});
+            setRevealedVotes(null);
           }
         });
       }
     }
   }, [tpm, me, firebase]);
+
+  console.log(revealedVotes);
 
   if (!firebase) {
     return <Loader />;
@@ -169,6 +171,7 @@ export default function SessionPage() {
                 id={id!}
                 ticketNum={currentTicket}
                 firebase={firebase}
+                enabled={!revealedVotes}
               />
             )}
             {currentTicket ? (

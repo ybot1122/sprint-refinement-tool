@@ -7,7 +7,7 @@ export default function ShowVotesNonTpm({
 }: {
   dev: User[];
   qa: User[];
-  currentVotes: Record<string, number>;
+  currentVotes: Record<string, number> | null;
 }) {
   return (
     <div className="flex w-full justify-around mt-20">
@@ -21,7 +21,7 @@ export default function ShowVotesNonTpm({
                 user.hasVoted ? "border-green-500" : "border-gray-300"
               } rounded px-2 py-1 w-3/4`}
             >
-              {user.name}: {currentVotes[user.name] || ""}
+              {user.name}: {currentVotes ? currentVotes[user.name] || "" : ""}
             </p>
           ))}
         </div>
@@ -36,7 +36,7 @@ export default function ShowVotesNonTpm({
                 user.hasVoted ? "border-green-500" : "border-gray-300"
               } rounded px-2 py-1 w-3/4`}
             >
-              {user.name}: {currentVotes[user.name] || ""}
+              {user.name}: {currentVotes ? currentVotes[user.name] || "" : ""}
             </p>
           ))}
         </div>
