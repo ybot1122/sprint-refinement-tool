@@ -33,7 +33,7 @@ export default function ShowVotesNonTpm({
         <h3 className="text-xl my-2">QA Votes</h3>
         <div className="flex flex-col items-center space-y-2">
           {qa.map((user) => (
-            <p
+            <div
               key={user.name}
               className={`border-2 ${
                 user.hasVoted ? "border-green-500" : "border-gray-300"
@@ -43,7 +43,7 @@ export default function ShowVotesNonTpm({
               <p className="text-2xl font-bold">
                 {currentVotes ? currentVotes[user.name] || "" : ""}
               </p>
-            </p>
+            </div>
           ))}
         </div>
       </div>

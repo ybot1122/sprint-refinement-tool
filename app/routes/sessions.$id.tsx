@@ -2,6 +2,7 @@ import { useParams, useSearchParams } from "@remix-run/react";
 import CurrentTicketOther from "components/CurrentTicketOther";
 import CurrentTicketTpm from "components/CurrentTicketTpm";
 import Loader from "components/Loader";
+import PastTickets from "components/PastTickets";
 import ShowVotes from "components/ShowVotes";
 import ShowVotesNonTpm from "components/ShowVotesNonTpm";
 import WelcomeToSession from "components/WelcomeToSession";
@@ -126,9 +127,7 @@ export default function SessionPage() {
     }
   }, [tpm, me, firebase]);
 
-  console.log(revealedVotes);
-
-  if (!firebase) {
+  if (!firebase || !id) {
     return <Loader />;
   }
 
@@ -186,7 +185,7 @@ export default function SessionPage() {
               )
             ) : null}
           </div>
-          <div className="grid grid-cols-3 gap-4">Past tickets</div>
+          <PastTickets firebase={firebase} id={id!} />
         </div>
       )}
     </div>
