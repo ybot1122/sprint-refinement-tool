@@ -68,7 +68,6 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
           </option>
           <option value="dev">Developer</option>
           <option value="qa">QA</option>
-          <option value="tpm">TPM</option>
         </select>
         <div className=" w-full max-w-md mt-4">
           <label htmlFor="name-input" className="block text-gray-700 mb-2">

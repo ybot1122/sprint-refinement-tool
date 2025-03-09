@@ -15,8 +15,6 @@ import { CurrentVotes, User } from "~/routes/sessions.$id";
 interface PastTicketsProps {
   firebase: FirebaseApp;
   id: string;
-  dev: User[];
-  qa: User[];
 }
 
 export type PastTicket = {
@@ -25,7 +23,7 @@ export type PastTicket = {
   votes: CurrentVotes;
 };
 
-const PastTickets: React.FC<PastTicketsProps> = ({ firebase, id, dev, qa }) => {
+const PastTickets: React.FC<PastTicketsProps> = ({ firebase, id }) => {
   const [pastTickets, setPastTickets] = useState<PastTicket[]>([]);
 
   useEffect(() => {

@@ -73,14 +73,6 @@ export default function SessionPage() {
         const curr = snapshot.val();
         setCurrentTicket(curr || null);
       });
-
-      // for debugging
-      onValue(ref(database, `sessions/${id}`), (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          console.log(data);
-        }
-      });
     });
   }, []);
 
@@ -108,6 +100,14 @@ export default function SessionPage() {
             setCurrentVotes(snapshot.val());
           } else {
             setCurrentVotes({});
+          }
+        });
+
+        // for debugging
+        onValue(ref(db, `sessions/${id}`), (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            console.log(data);
           }
         });
       }
@@ -147,10 +147,26 @@ export default function SessionPage() {
       )}
       {role && me && (
         <div className="w-full max-w-4xl bg-white p-8 rounded shadow-md">
-          <h1 className="text-2xl font-bold mb-4">
-            Sprint Refinement - {tpm} is the TPM
-          </h1>
-          <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold">
+              Sprint Refinement - {tpm} is the TPM.
+            </h1>
+            <h2 className="text-xl">
+              Session ID:{" "}
+              <button
+                className="text-blue-500 hover:text-blue-700 underline cursor-pointer"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `${window.location.origin}${window.location.pathname}`
+                  );
+                  alert("Session ID copied to clipboard!");
+                }}
+              >
+                {id}
+              </button>
+            </h2>
+          </div>
+          <div className="mb-4">
             <p>
               Welcome, {me}. You are a {role.toLocaleUpperCase()}.
             </p>
