@@ -22,10 +22,14 @@ export default function CurrentTicketOther({
   const [selectedVote, setSelectedVote] = useState<number | null>(null);
 
   useEffect(() => {
-    setSelectedVote(null);
+    if (ticketNum === null) {
+      setSelectedVote(null);
+    }
   }, [ticketNum]);
 
   useEffect(() => {
+    if (ticketNum === null) return;
+
     const db = getDatabase(firebase); // Get a reference to the database service
     const currentVotesRef = ref(db, `sessions/${id}/currentVotes/${me}`);
 
@@ -51,7 +55,7 @@ export default function CurrentTicketOther({
       .catch((error) => {
         console.error(error);
       });
-  }, [selectedVote]);
+  }, [selectedVote, ticketNum]);
 
   if (!ticketNum) {
     return <div>Waiting for next ticket...</div>;

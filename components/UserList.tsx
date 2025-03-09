@@ -24,6 +24,9 @@ const UserList: React.FC<UserListProps> = ({
     push(emojiRef, { emoji, to, from: me });
   };
 
+  console.log(currentVotes);
+  console.log(users);
+
   return (
     <div className="flex flex-col items-center space-y-2">
       {users.map((user) => (

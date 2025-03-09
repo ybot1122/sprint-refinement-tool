@@ -115,7 +115,10 @@ export default function SessionRecapPage() {
             <p>Total Duration:</p>
           </div>
           <div className="col-span-1">
-            <p>{(recap.totalDuration / 60000).toFixed(2)} minutes</p>
+            <p>
+              {Math.floor(recap.totalDuration / 60000)}m{" "}
+              {((recap.totalDuration % 60000) / 1000).toFixed(0)}s
+            </p>
           </div>
           <div className="col-span-1">
             <p>Number of Tickets Pointed:</p>
