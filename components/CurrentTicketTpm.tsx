@@ -1,6 +1,6 @@
 import { FirebaseApp } from "firebase/app";
 import { get, getDatabase, onValue, push, ref, set } from "firebase/database";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import resetCurrentTicket from "utils/resetCurrentTicket";
 import { CurrentVotes, User } from "~/routes/sessions.$id";
 import VoteNumbers from "./VoteNumbers";
@@ -16,6 +16,15 @@ export default function CurrentTicketTpm({
 }) {
   const [votesRevealed, setVotesRevealed] = useState(false);
   const [finalVote, setFinalVote] = useState<number | null>(null);
+  const startTimestamp = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (currentTicket) {
+      startTimestamp.current = Date.now();
+    } else {
+      startTimestamp.current = null;
+    }
+  }, [currentTicket]);
 
   useEffect(() => {
     setVotesRevealed(false);
@@ -123,6 +132,7 @@ export default function CurrentTicketTpm({
                 currentTicket,
                 moveTicketToDone: true,
                 finalVote,
+                duration: Date.now() - (startTimestamp.current ?? Date.now()),
               });
               setFinalVote(null);
             }}
@@ -142,6 +152,7 @@ export default function CurrentTicketTpm({
               currentTicket,
               moveTicketToDone: false,
               finalVote,
+              duration: Date.now() - (startTimestamp.current ?? Date.now()),
             });
             setFinalVote(null);
           }}
