@@ -4,7 +4,6 @@ import CurrentTicketTpm from "components/CurrentTicketTpm";
 import Loader from "components/Loader";
 import PastTickets from "components/PastTickets";
 import ShowVotes from "components/ShowVotes";
-import ShowVotesNonTpm from "components/ShowVotesNonTpm";
 import WelcomeToSession from "components/WelcomeToSession";
 import initFirebase from "constants/init_firebase";
 import { FirebaseApp } from "firebase/app";
@@ -211,11 +210,7 @@ export default function SessionPage() {
               tpm && tpm === me ? (
                 <ShowVotes dev={devs} qa={qas} currentVotes={currentVotes} />
               ) : (
-                <ShowVotesNonTpm
-                  dev={devs}
-                  qa={qas}
-                  currentVotes={revealedVotes}
-                />
+                <ShowVotes dev={devs} qa={qas} currentVotes={revealedVotes} />
               )
             ) : null}
           </div>

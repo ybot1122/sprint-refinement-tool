@@ -1,6 +1,5 @@
 import { FirebaseApp } from "firebase/app";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getFirestore,
   collection,
@@ -11,7 +10,6 @@ import {
 import { getDatabase, onValue, ref } from "firebase/database";
 import { CurrentVotes, User } from "~/routes/sessions.$id";
 
-<div className="grid grid-cols-3 gap-4">Past tickets</div>;
 interface PastTicketsProps {
   firebase: FirebaseApp;
   id: string;
@@ -25,6 +23,7 @@ export type PastTicket = {
 
 const PastTickets: React.FC<PastTicketsProps> = ({ firebase, id }) => {
   const [pastTickets, setPastTickets] = useState<PastTicket[]>([]);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const db = getDatabase(firebase); // Get a reference to the database service
@@ -43,21 +42,31 @@ const PastTickets: React.FC<PastTicketsProps> = ({ firebase, id }) => {
   }, [firebase, id]);
 
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {pastTickets.map((ticket: PastTicket) => (
-        <div key={ticket.uuid} className="border p-4 rounded shadow">
-          <h2 className="text-lg font-bold mb-2">{ticket.id}</h2>
-          <div className="mb-4">
-            <ul>
-              {Object.keys(ticket.votes).map((voteKey) => (
-                <li key={voteKey}>
-                  {voteKey}: {ticket.votes[voteKey]}
-                </li>
-              ))}
-            </ul>
-          </div>
+    <div>
+      <button
+        onClick={() => setIsVisible(!isVisible)}
+        className="mb-4 p-2 bg-blue-500 text-white rounded cursor-pointer"
+      >
+        {isVisible ? "Hide" : "Show"} Pointed Tickets ({pastTickets.length})
+      </button>
+      {isVisible && (
+        <div className="grid grid-cols-3 gap-4">
+          {pastTickets.map((ticket: PastTicket) => (
+            <div key={ticket.uuid} className="border p-4 rounded shadow">
+              <h2 className="text-lg font-bold mb-2">{ticket.id}</h2>
+              <div className="mb-4">
+                <ul>
+                  {Object.keys(ticket.votes).map((voteKey) => (
+                    <li key={voteKey}>
+                      {voteKey}: {ticket.votes[voteKey]}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 };

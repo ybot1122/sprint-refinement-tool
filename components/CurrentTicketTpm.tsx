@@ -26,7 +26,7 @@ export default function CurrentTicketTpm({
           type="text"
           className="border border-gray-300 rounded px-2 py-1 text-center my-5"
           id="ticket-input"
-          placeholder="Example: WEB-1234"
+          autoComplete="off"
         />
         <button
           type="button"
