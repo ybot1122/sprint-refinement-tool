@@ -43,7 +43,6 @@ export default function SessionPage() {
           alert("Session not found");
           window.location.href = "/";
         } else {
-          console.log(snapshot.val());
           const val = snapshot.val();
           setTpm(val.admin);
           setDevs(Object.values(val?.dev || []));

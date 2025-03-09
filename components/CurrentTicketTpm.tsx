@@ -155,7 +155,6 @@ export default function CurrentTicketTpm({
                 .then((snapshot) => {
                   if (snapshot.exists()) {
                     const devs = snapshot.val();
-                    console.log(devs);
                     Object.keys(devs).forEach((i) => {
                       devs[i].hasVoted = false;
                     });

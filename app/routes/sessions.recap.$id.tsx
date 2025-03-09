@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 type Recap = {
   totalDuration: number;
   numberOfTickets: number;
+  emojisSent: number;
 };
 
 export default function SessionRecapPage() {
@@ -44,6 +45,7 @@ export default function SessionRecapPage() {
         setRecap({
           totalDuration: totalDuration || 0,
           numberOfTickets: numberOfTickets || 0,
+          emojisSent: Object.keys(val.emoji).length,
         });
       });
     });
@@ -66,6 +68,12 @@ export default function SessionRecapPage() {
           </div>
           <div className="col-span-1">
             <p>{recap.numberOfTickets}</p>
+          </div>
+          <div className="col-span-1">
+            <p>Number of Emojis Sent:</p>
+          </div>
+          <div className="col-span-1">
+            <p>{recap.emojisSent}</p>
           </div>
         </div>
       )}
