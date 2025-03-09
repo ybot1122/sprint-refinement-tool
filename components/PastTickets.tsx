@@ -19,6 +19,7 @@ export type PastTicket = {
   uuid: string;
   id: string;
   votes: CurrentVotes;
+  finalVote: number;
 };
 
 const PastTickets: React.FC<PastTicketsProps> = ({ firebase, id }) => {
@@ -53,7 +54,9 @@ const PastTickets: React.FC<PastTicketsProps> = ({ firebase, id }) => {
         <div className="grid grid-cols-3 gap-4">
           {pastTickets.map((ticket: PastTicket) => (
             <div key={ticket.uuid} className="border p-4 rounded shadow">
-              <h2 className="text-lg font-bold mb-2">{ticket.id}</h2>
+              <h2 className="text-lg font-bold mb-2">
+                {ticket.id}: {ticket.finalVote}
+              </h2>
               <div className="mb-4">
                 <ul>
                   {Object.keys(ticket.votes).map((voteKey) => (

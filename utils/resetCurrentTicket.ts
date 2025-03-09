@@ -10,11 +10,13 @@ export default function ({
   id,
   currentTicket,
   moveTicketToDone,
+  finalVote,
 }: {
   firebase: FirebaseApp;
   currentTicket: string;
   id: string;
   moveTicketToDone: boolean;
+  finalVote: number | null;
 }) {
   const db = getDatabase(firebase); // Get a reference to the database service
   const ticketRef = ref(db, `sessions/${id}/currentTicket`);
@@ -37,6 +39,7 @@ export default function ({
         push(pastTicketsRef, {
           id: currentTicket,
           votes: revealedVotes,
+          finalVote,
         });
         set(revealedRef, revealedVotes);
       } else {

@@ -3,6 +3,7 @@ import { get, getDatabase, onValue, push, ref, set } from "firebase/database";
 import { useEffect, useState } from "react";
 import resetCurrentTicket from "utils/resetCurrentTicket";
 import { CurrentVotes, User } from "~/routes/sessions.$id";
+import VoteNumbers from "./VoteNumbers";
 
 export default function CurrentTicketTpm({
   id,
@@ -14,6 +15,7 @@ export default function CurrentTicketTpm({
   firebase: FirebaseApp;
 }) {
   const [votesRevealed, setVotesRevealed] = useState(false);
+  const [finalVote, setFinalVote] = useState<number | null>(null);
 
   useEffect(() => {
     setVotesRevealed(false);
@@ -74,6 +76,16 @@ export default function CurrentTicketTpm({
       <h2 className="text-2xl mb-4">
         Current Ticket: <strong>{currentTicket}</strong>
       </h2>
+      {votesRevealed && (
+        <div className="flex justify-center flex-col items-center">
+          <h3 className="text-xl my-5">
+            Votes Revealed. Select the final size.
+          </h3>
+          <VoteNumbers
+            setSelectedVote={(num: number | null) => setFinalVote(num)}
+          />
+        </div>
+      )}
       <div>
         {!votesRevealed && (
           <button
@@ -97,18 +109,24 @@ export default function CurrentTicketTpm({
             Reveal Votes
           </button>
         )}
+
         {votesRevealed && (
           <button
             type="submit"
-            className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded cursor-pointer my-5 mx-2"
+            className={`bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded cursor-pointer my-5 mx-2 ${
+              finalVote === null ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             onClick={() => {
               resetCurrentTicket({
                 firebase,
                 id,
                 currentTicket,
                 moveTicketToDone: true,
+                finalVote,
               });
+              setFinalVote(null);
             }}
+            disabled={finalVote === null}
           >
             Finish Ticket
           </button>
@@ -123,7 +141,9 @@ export default function CurrentTicketTpm({
               id,
               currentTicket,
               moveTicketToDone: false,
+              finalVote,
             });
+            setFinalVote(null);
           }}
         >
           Cancel Ticket

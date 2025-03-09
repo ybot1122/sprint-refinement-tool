@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 type Recap = {
   totalDuration: number;
   numberOfTickets: number;
-  emojisSent: number;
+  ticketSizes: { id: string; ticket: string; finalVote: number }[];
 };
 
 export default function SessionRecapPage() {
@@ -42,10 +42,19 @@ export default function SessionRecapPage() {
         const val = snapshot.val();
         const totalDuration = val?.end - val?.created_at;
         const numberOfTickets = Object.keys(val?.pastTickets || {}).length;
+
+        const ticketSizes = Object.values(val.pastTickets || {}).map(
+          (ticket: any) => ({
+            id: crypto.randomUUID(),
+            ticket: ticket.id,
+            finalVote: ticket.finalVote,
+          })
+        );
+
         setRecap({
           totalDuration: totalDuration || 0,
           numberOfTickets: numberOfTickets || 0,
-          emojisSent: Object.keys(val.emoji).length,
+          ticketSizes,
         });
       });
     });
@@ -69,12 +78,16 @@ export default function SessionRecapPage() {
           <div className="col-span-1">
             <p>{recap.numberOfTickets}</p>
           </div>
-          <div className="col-span-1">
-            <p>Number of Emojis Sent:</p>
-          </div>
-          <div className="col-span-1">
-            <p>{recap.emojisSent}</p>
-          </div>
+          {recap.ticketSizes.map((t) => (
+            <>
+              <div className="col-span-1 text-right">
+                <p>{t.ticket.toLocaleUpperCase()}</p>
+              </div>
+              <div className="col-span-1">
+                <p>{t.finalVote}</p>
+              </div>
+            </>
+          ))}
         </div>
       )}
     </div>
