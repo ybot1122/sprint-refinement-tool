@@ -17,11 +17,11 @@ const VoteNumbers: React.FC<{
   }
 
   return (
-    <div className="flex space-x-2">
+    <div className="flex space-x-2 flex-wrap">
       {nums.map((num) => (
         <button
           key={num}
-          className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer ${
+          className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer my-2 ${
             selectedVote === num ? "bg-blue-700" : ""
           }`}
           onClick={() => handleVoteClick(num)}
@@ -30,7 +30,7 @@ const VoteNumbers: React.FC<{
         </button>
       ))}
       <button
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer my-2"
         onClick={() => handleVoteClick(null)}
       >
         Clear

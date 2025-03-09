@@ -53,7 +53,7 @@ const PastTickets: React.FC<PastTicketsProps> = ({ firebase, id }) => {
         {isVisible ? "Hide" : "Show"} Pointed Tickets ({pastTickets.length})
       </button>
       {isVisible && (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {pastTickets
             .slice()
             .reverse()
