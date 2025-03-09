@@ -2,7 +2,8 @@ import React, { useState } from "react";
 
 const VoteNumbers: React.FC<{
   setSelectedVote: (num: number | null) => void;
-}> = ({ setSelectedVote }) => {
+  allowZero?: boolean;
+}> = ({ setSelectedVote, allowZero = false }) => {
   const [selectedVote, setSelectedVoteState] = useState<number | null>(null);
 
   const handleVoteClick = (num: number | null) => {
@@ -10,9 +11,14 @@ const VoteNumbers: React.FC<{
     setSelectedVoteState(num);
   };
 
+  const nums = [1, 2, 3, 5, 8, 13, 21];
+  if (allowZero) {
+    nums.unshift(0);
+  }
+
   return (
     <div className="flex space-x-2">
-      {[1, 2, 3, 5, 8, 13, 21].map((num) => (
+      {nums.map((num) => (
         <button
           key={num}
           className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer ${

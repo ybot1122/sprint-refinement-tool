@@ -66,6 +66,7 @@ export default function CurrentTicketOther({
         {enabled && (
           <VoteNumbers
             setSelectedVote={(num: number | null) => setSelectedVote(num)}
+            allowZero
           />
         )}
         {selectedVote !== null && (

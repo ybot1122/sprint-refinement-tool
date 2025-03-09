@@ -16,6 +16,7 @@ export default function CurrentTicketTpm({
 }) {
   const [votesRevealed, setVotesRevealed] = useState(false);
   const [finalVote, setFinalVote] = useState<number | null>(null);
+  const [finalQaVote, setFinalQaVote] = useState<number | null>(null);
   const startTimestamp = useRef<number | null>(null);
 
   useEffect(() => {
@@ -86,12 +87,20 @@ export default function CurrentTicketTpm({
         Current Ticket: <strong>{currentTicket.toLocaleUpperCase()}</strong>
       </h2>
       {votesRevealed && (
-        <div className="flex justify-center flex-col items-center">
-          <h3 className="text-xl my-5">
-            Votes Revealed. Select the final size.
-          </h3>
+        <div className="flex justify-center flex-col items-center mt-10">
+          <h3 className="text-xl my-5">Votes Revealed. Select Dev size.</h3>
           <VoteNumbers
             setSelectedVote={(num: number | null) => setFinalVote(num)}
+            allowZero
+          />
+        </div>
+      )}
+      {votesRevealed && (
+        <div className="flex justify-center flex-col items-center my-10">
+          <h3 className="text-xl my-5">Votes Revealed. Select QA size.</h3>
+          <VoteNumbers
+            setSelectedVote={(num: number | null) => setFinalQaVote(num)}
+            allowZero
           />
         </div>
       )}
@@ -123,7 +132,9 @@ export default function CurrentTicketTpm({
           <button
             type="submit"
             className={`bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded cursor-pointer my-5 mx-2 ${
-              finalVote === null ? "opacity-50 cursor-not-allowed" : ""
+              finalVote === null || finalQaVote === null
+                ? "opacity-50 cursor-not-allowed"
+                : ""
             }`}
             onClick={() => {
               resetCurrentTicket({
@@ -132,11 +143,13 @@ export default function CurrentTicketTpm({
                 currentTicket,
                 moveTicketToDone: true,
                 finalVote,
+                finalQaVote,
                 duration: Date.now() - (startTimestamp.current ?? Date.now()),
               });
               setFinalVote(null);
+              setFinalQaVote(null);
             }}
-            disabled={finalVote === null}
+            disabled={finalVote === null || finalQaVote === null}
           >
             Finish Ticket
           </button>
@@ -144,7 +157,7 @@ export default function CurrentTicketTpm({
 
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer my-5 mx-2"
+          className="bg-red-700 hover:bg-red-900 text-white font-bold py-2 px-4 rounded cursor-pointer my-5 mx-2"
           onClick={() => {
             resetCurrentTicket({
               firebase,
@@ -152,9 +165,11 @@ export default function CurrentTicketTpm({
               currentTicket,
               moveTicketToDone: false,
               finalVote,
+              finalQaVote,
               duration: Date.now() - (startTimestamp.current ?? Date.now()),
             });
             setFinalVote(null);
+            setFinalQaVote(null);
           }}
         >
           Cancel Ticket
