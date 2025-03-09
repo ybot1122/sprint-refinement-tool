@@ -74,7 +74,7 @@ export default function CurrentTicketTpm({
   return (
     <div className="w-full text-center">
       <h2 className="text-2xl mb-4">
-        Current Ticket: <strong>{currentTicket}</strong>
+        Current Ticket: <strong>{currentTicket.toLocaleUpperCase()}</strong>
       </h2>
       {votesRevealed && (
         <div className="flex justify-center flex-col items-center">

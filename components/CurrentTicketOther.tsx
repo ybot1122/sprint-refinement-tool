@@ -60,7 +60,7 @@ export default function CurrentTicketOther({
   return (
     <div>
       <h2 className="text-2xl mb-4">
-        Current Ticket: <strong>{ticketNum}</strong>
+        Current Ticket: <strong>{ticketNum.toLocaleUpperCase()}</strong>
       </h2>
       <div>
         {enabled && (

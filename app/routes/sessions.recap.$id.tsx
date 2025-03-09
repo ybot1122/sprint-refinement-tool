@@ -2,7 +2,7 @@ import { useParams } from "@remix-run/react";
 import initFirebase from "constants/init_firebase";
 import { FirebaseApp } from "firebase/app";
 import { get, getDatabase, onValue, ref } from "firebase/database";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type Recap = {
   totalDuration: number;
@@ -79,14 +79,14 @@ export default function SessionRecapPage() {
             <p>{recap.numberOfTickets}</p>
           </div>
           {recap.ticketSizes.map((t) => (
-            <>
+            <React.Fragment key={t.id}>
               <div className="col-span-1 text-right">
                 <p>{t.ticket.toLocaleUpperCase()}</p>
               </div>
               <div className="col-span-1">
                 <p>{t.finalVote}</p>
               </div>
-            </>
+            </React.Fragment>
           ))}
         </div>
       )}
