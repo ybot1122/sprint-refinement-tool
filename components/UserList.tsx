@@ -37,17 +37,6 @@ const UserList: React.FC<UserListProps> = ({
           <p className="text-2xl font-bold mb-2">
             {currentVotes ? currentVotes[user.name] || "" : ""}
           </p>
-          <div className="flex space-x-2 mt-4">
-            {["👍", "❤️", "😂", "🎉", "😢", "😡"].map((emoji) => (
-              <button
-                key={emoji}
-                className="text-sm cursor-pointer hover:bg-gray-200 rounded"
-                onClick={() => sendEmoji(emoji, user.name)}
-              >
-                {emoji}
-              </button>
-            ))}
-          </div>
         </div>
       ))}
     </div>

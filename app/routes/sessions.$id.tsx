@@ -3,7 +3,6 @@ import CurrentTicketOther from "components/CurrentTicketOther";
 import CurrentTicketTpm from "components/CurrentTicketTpm";
 import Loader from "components/Loader";
 import PastTickets from "components/PastTickets";
-import ReactLog from "components/ReactLog";
 import ShowVotes from "components/ShowVotes";
 import WelcomeToSession from "components/WelcomeToSession";
 import initFirebase from "constants/init_firebase";
@@ -231,7 +230,6 @@ export default function SessionPage() {
           <PastTickets firebase={firebase} id={id!} />
         </div>
       )}
-      <ReactLog firebase={firebase} id={id} />
     </div>
   );
 }
