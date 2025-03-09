@@ -2,6 +2,7 @@ import { FirebaseApp } from "firebase/app";
 import { get, getDatabase, push, ref, set } from "firebase/database";
 import { useEffect, useState } from "react";
 import { Role, User } from "~/routes/sessions.$id";
+import VoteNumbers from "./VoteNumbers";
 
 export default function CurrentTicketOther({
   me,
@@ -63,28 +64,9 @@ export default function CurrentTicketOther({
       </h2>
       <div>
         {enabled && (
-          <>
-            {" "}
-            <div className="flex space-x-2">
-              {[1, 2, 3, 5, 8, 13, 21].map((num) => (
-                <button
-                  key={num}
-                  className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer ${
-                    selectedVote === num ? "bg-blue-700" : ""
-                  }`}
-                  onClick={() => setSelectedVote(num)}
-                >
-                  {num}
-                </button>
-              ))}
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
-                onClick={() => setSelectedVote(null)}
-              >
-                Clear
-              </button>
-            </div>
-          </>
+          <VoteNumbers
+            setSelectedVote={(num: number | null) => setSelectedVote(num)}
+          />
         )}
         {selectedVote !== null && (
           <p className="mt-4">You have selected: {selectedVote}</p>

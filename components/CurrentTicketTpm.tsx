@@ -100,7 +100,7 @@ export default function CurrentTicketTpm({
         {votesRevealed && (
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer my-5 mx-2"
+            className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded cursor-pointer my-5 mx-2"
             onClick={() => {
               resetCurrentTicket({
                 firebase,
