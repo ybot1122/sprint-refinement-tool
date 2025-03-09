@@ -50,6 +50,20 @@ export default function CurrentTicketTpm({
         >
           Start!
         </button>
+
+        <button
+          type="button"
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer my-5"
+          onClick={() => {
+            const db = getDatabase(firebase); // Get a reference to the database service
+            const sessionRef = ref(db, `sessions/${id}/end`);
+            set(sessionRef, Date.now()).then(() => {
+              console.log("Session ended");
+            });
+          }}
+        >
+          End Session
+        </button>
       </div>
     );
   }

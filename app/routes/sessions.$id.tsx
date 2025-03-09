@@ -73,6 +73,13 @@ export default function SessionPage() {
         const curr = snapshot.val();
         setCurrentTicket(curr || null);
       });
+
+      onValue(ref(database, `sessions/${id}/end`), (snapshot) => {
+        const curr = snapshot.val();
+        if (curr) {
+          window.location.href = `/sessions/recap/${id}`;
+        }
+      });
     });
   }, []);
 
@@ -170,6 +177,17 @@ export default function SessionPage() {
             <p>
               Welcome, {me}. You are a {role.toLocaleUpperCase()}.
             </p>
+            {role === "tpm" && (
+              <div className="mt-5">
+                <p>Share this URL with your team:</p>
+                <input
+                  type="text"
+                  readOnly
+                  className="border p-2 rounded w-full text-center"
+                  value={`${window.location.origin}${window.location.pathname}`}
+                />
+              </div>
+            )}
           </div>
           <div className="flex flex-col justify-center items-center my-20">
             {role === "tpm" && (

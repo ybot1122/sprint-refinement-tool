@@ -65,7 +65,6 @@ export default function CurrentTicketOther({
         {enabled && (
           <>
             {" "}
-            <h3 className="text-xl font-semibold mt-5 mb-2">Pick your vote</h3>
             <div className="flex space-x-2">
               {[1, 2, 3, 5, 8, 13, 21].map((num) => (
                 <button
