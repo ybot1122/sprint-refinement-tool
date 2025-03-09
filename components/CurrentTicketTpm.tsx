@@ -1,5 +1,5 @@
 import { FirebaseApp } from "firebase/app";
-import { get, getDatabase, onValue, ref, set } from "firebase/database";
+import { get, getDatabase, onValue, push, ref, set } from "firebase/database";
 import { useEffect, useState } from "react";
 import { CurrentVotes, User } from "~/routes/sessions.$id";
 
@@ -72,8 +72,10 @@ export default function CurrentTicketTpm({
                   const revealedRef = ref(db, `sessions/${id}/revealedVotes`);
                   const currentVotes = snapshot.val();
                   set(revealedRef, currentVotes);
+                  setVotesRevealed(true);
+                } else {
+                  alert("No one has voted yet!");
                 }
-                setVotesRevealed(true);
               });
             }}
           >
@@ -96,8 +98,24 @@ export default function CurrentTicketTpm({
 
               // reset revealed votes
               const revealedRef = ref(db, `sessions/${id}/revealedVotes`);
-              set(revealedRef, null);
-              console.log("Revealed votes reset");
+
+              // move ticket to past tickets
+              get(revealedRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                  const revealedVotes = snapshot.val();
+                  const pastTicketsRef = ref(db, `sessions/${id}/pastTickets`);
+                  push(pastTicketsRef, {
+                    id: currentTicket,
+                    votes: revealedVotes,
+                  });
+                  set(revealedRef, revealedVotes);
+                } else {
+                  console.log("No data available");
+                }
+
+                set(revealedRef, null);
+                console.log("Revealed votes reset");
+              });
 
               // reset vote status for dev
               const devsRef = ref(db, `sessions/${id}/dev`);
