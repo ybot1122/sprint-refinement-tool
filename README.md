@@ -1,3 +1,5 @@
+Sprint Planning Tool - side project. Learning to use GitHub Copilot as much as possible.
+
 # Remix
 
 This directory is a brief example of a [Remix](https://remix.run/docs) site that can be deployed to Vercel with zero configuration.
