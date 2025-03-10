@@ -35,6 +35,12 @@ export default function SessionPage() {
   const [firebase, setFirebase] = useState<FirebaseApp>();
 
   useEffect(() => {
+    const url = new URL(window.location.href);
+    url.search = "";
+    window.history.replaceState({}, document.title, url.toString());
+  }, []);
+
+  useEffect(() => {
     const check = async () => {
       try {
         const snapshot = await get(sessionRef);
@@ -150,7 +156,7 @@ export default function SessionPage() {
           addUser={addUser}
         />
       )}
-      {role && me && (
+      {role && me && !(role === "tpm" && tpm && tpm !== me) && (
         <div className="w-full max-w-4xl bg-white p-8 rounded shadow-md">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-bold">
