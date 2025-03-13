@@ -34,7 +34,13 @@ function parseCoverageData(coverageData) {
 
   for (const [file, data] of Object.entries(coverageData)) {
     const { statements, branches, functions, lines } = data;
-    markdown += `| ${file} | ${statements.pct}% | ${branches.pct}% | ${functions.pct}% | ${lines.pct}% |\n`;
+    markdown += `| ${file} | ${statements.pct}% ${
+      statements.pct < 100 ? "❌" : ""
+    } | ${branches.pct}% ${branches.pct < 100 ? "❌" : ""} | ${
+      functions.pct
+    }% ${functions.pct < 100 ? "❌" : ""} | ${lines.pct}% ${
+      lines.pct < 100 ? "❌" : ""
+    } |\n`;
   }
 
   return markdown;
@@ -50,20 +56,7 @@ function parseTestReport(reportData) {
     test.assertionResults.forEach((a) => {
       if (a.status === "failed") {
         const fileName = path.basename(test.name);
-        markdown += `| ${fileName} | ${a.fullName} | <span style="color:red">FAILED</span> |\n`;
-      }
-    });
-  });
-
-  markdown += "\n## Passing Tests\n\n";
-  markdown += "| File | Test | Status |\n";
-  markdown += "|------|------|--------|\n";
-
-  reportData.testResults.forEach((test) => {
-    test.assertionResults.forEach((a) => {
-      if (a.status === "passed") {
-        const fileName = path.basename(test.name);
-        markdown += `| ${fileName} | ${a.fullName} | PASSED |\n`;
+        markdown += `| ${fileName} | ${a.fullName} | FAILED ❌ |\n`;
       }
     });
   });

@@ -18,12 +18,6 @@ const UserList: React.FC<UserListProps> = ({
   me,
   id,
 }) => {
-  const sendEmoji = (emoji: string, to: string) => {
-    const database = getDatabase(firebase);
-    const emojiRef = ref(database, `sessions/${id}/emoji`);
-    push(emojiRef, { emoji, to, from: me });
-  };
-
   return (
     <div className="flex flex-col items-center space-y-2">
       {users.map((user) => (
