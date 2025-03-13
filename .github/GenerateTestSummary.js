@@ -2,7 +2,8 @@ import fs from "fs";
 import path from "path";
 
 const coverageFilePath = "./coverage/coverage-final.json";
-const reportFilePath = "./report.json";
+const reportFilePath = "./coverage/report.json";
+const coverageSummary = "./coverage/coverage-summary.json";
 
 function parseTestReport(reportData) {
   let markdown = "# Test Report\n\n";
@@ -14,7 +15,7 @@ function parseTestReport(reportData) {
     test.assertionResults.forEach((a) => {
       if (a.status === "failed") {
         const fileName = path.basename(test.name);
-        markdown += `| ${fileName} | ${a.fullName} | FAILED |\n`;
+        markdown += `| ${fileName} | ${a.fullName} | <span style="color:red">FAILED</span> |\n`;
       }
     });
   });
@@ -59,3 +60,15 @@ function parseCoverageData(coverageData) {
 
   return markdown;
 }
+
+fs.readFile(coverageSummary, "utf8", (err, data) => {
+  if (err) {
+    console.error("Error reading coverage summary file:", err);
+    return;
+  }
+
+  const coverageData = JSON.parse(data);
+  const markdown = parseCoverageData(coverageData);
+
+  console.log(markdown);
+});
