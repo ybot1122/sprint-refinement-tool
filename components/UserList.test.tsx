@@ -64,4 +64,20 @@ describe("UserList", () => {
     expect(aliceElement).toHaveClass("bg-green-100");
     expect(bobElement).not.toHaveClass("bg-green-100");
   });
+
+  it("is a bad test", () => {
+    expect(1).toEqual(2);
+  });
+
+  describe("nested describes", () => {
+    it("is nested", () => {
+      expect(1).toEqual(1);
+    });
+
+    describe("nested again", () => {
+      it("is super nested", () => {
+        expect(1).toEqual(2);
+      });
+    });
+  });
 });
