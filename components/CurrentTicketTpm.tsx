@@ -86,6 +86,12 @@ export default function CurrentTicketTpm({
       <h2 className="text-2xl mb-4">
         Current Ticket: <strong>{currentTicket.toLocaleUpperCase()}</strong>
       </h2>
+      {!votesRevealed && (
+        <>
+          <p>Only you can see votes.</p>
+          <p>Other teammates cannot see votes until you click "Reveal Votes"</p>
+        </>
+      )}
       {votesRevealed && (
         <div className="flex justify-center flex-col items-center mt-10">
           <h3 className="text-xl my-5">Votes Revealed. Select Dev size.</h3>
