@@ -103,7 +103,8 @@ export default function SessionPage() {
   const rejoinUser = useCallback(
     (user: string) => {
       setMe(user);
-      const role = devs.some((d) => d.name === user) ? "dev" : "qa";
+      const role =
+        user === tpm ? "tpm" : devs.some((d) => d.name === user) ? "dev" : "qa";
       setRole(role);
     },
     [devs, qas]

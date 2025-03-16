@@ -61,6 +61,8 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
     setIsModalOpen(false);
   };
 
+  const allUsers = [...online, { name: tpm }];
+
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
@@ -140,12 +142,10 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
         ) : (
           <>
             <div className=" w-full max-w-md mt-4">
-              {online.length === 0 ? (
-                "no one else here :("
-              ) : isLoading ? (
+              {isLoading ? (
                 <Loader />
               ) : (
-                [...online, { name: tpm }].map((user) => (
+                allUsers.map((user) => (
                   <div
                     key={user.name}
                     className="flex justify-between items-center mb-2"

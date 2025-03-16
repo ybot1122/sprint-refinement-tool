@@ -58,7 +58,18 @@ export default function CurrentTicketOther({
   }, [selectedVote, ticketNum]);
 
   if (!ticketNum) {
-    return <div>Waiting for next ticket...</div>;
+    return (
+      <div>
+        <div>Waiting for next ticket...</div>
+        <div>
+          <img
+            src="/coffee-cup.gif"
+            alt="Coffe cup from Freepik"
+            className="w-[150px] mt-10"
+          />
+        </div>
+      </div>
+    );
   }
 
   return (
