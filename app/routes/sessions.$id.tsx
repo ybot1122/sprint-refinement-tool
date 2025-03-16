@@ -100,6 +100,15 @@ export default function SessionPage() {
     });
   }, []);
 
+  const rejoinUser = useCallback(
+    (user: string) => {
+      setMe(user);
+      const role = devs.some((d) => d.name === user) ? "dev" : "qa";
+      setRole(role);
+    },
+    [devs, qas]
+  );
+
   useEffect(() => {
     if (firebase) {
       if (tpm && tpm === me) {
@@ -154,6 +163,7 @@ export default function SessionPage() {
           tpm={tpm}
           online={devs.concat(qas)}
           addUser={addUser}
+          rejoinUser={rejoinUser}
         />
       )}
       {role && me && !(role === "tpm" && tpm && tpm !== me) && (

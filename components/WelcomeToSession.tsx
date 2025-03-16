@@ -6,16 +6,19 @@ interface WelcomeToSessionProps {
   tpm: string;
   online: User[];
   addUser: (user: string, role: Role) => void;
+  rejoinUser: (user: string) => void;
 }
 
 const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
   tpm,
   online,
   addUser,
+  rejoinUser,
 }) => {
   const [role, setRole] = useState<Role | null>(null);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onJoin = () => {
     setIsLoading(true);
@@ -26,7 +29,7 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
     }
 
     if (online.some((user) => user.name === name)) {
-      alert("Name already taken");
+      setIsModalOpen(true);
       setIsLoading(false);
       return;
     }
@@ -40,6 +43,15 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
     if (val === "dev" || val === "qa" || val === "tpm") {
       setRole(val);
     }
+  };
+
+  const handleModalConfirm = () => {
+    setIsModalOpen(false);
+    rejoinUser(name);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -68,6 +80,7 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
           </option>
           <option value="dev">Developer</option>
           <option value="qa">QA</option>
+          <option value="tpm">TPM</option>
         </select>
         <div className=" w-full max-w-md mt-4">
           <label htmlFor="name-input" className="block text-gray-700 mb-2">
@@ -81,7 +94,6 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
             className="block w-full p-2 border border-gray-300 rounded mb-4"
           />
         </div>
-
         {isLoading ? (
           <Loader />
         ) : (
@@ -94,6 +106,29 @@ const WelcomeToSession: React.FC<WelcomeToSessionProps> = ({
           </button>
         )}
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Name already taken</h2>
+            <p className="mb-4">Are you sure this is you?</p>
+            <div className="flex justify-end">
+              <button
+                onClick={handleModalCancel}
+                className="bg-gray-300 text-black p-2 rounded mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleModalConfirm}
+                className="bg-blue-500 text-white p-2 rounded"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
