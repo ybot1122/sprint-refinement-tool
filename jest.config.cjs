@@ -1,6 +1,6 @@
 module.exports = {
   testEnvironment: "jsdom",
-  coverageReporters: ["json"],
+  coverageReporters: ["json-summary", "text"],
   transform: {
     "^.+.tsx?$": ["ts-jest", {}],
   },

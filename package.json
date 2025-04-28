@@ -7,7 +7,7 @@
     "build": "remix vite:build",
     "dev": "remix vite:dev",
     "typecheck": "tsc",
-    "test": "jest --coverage"
+    "test": "jest --coverage --json --outputFile='./coverage/report.json' --collectCoverageFrom='**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
     "@remix-run/node": "2.10.0",
